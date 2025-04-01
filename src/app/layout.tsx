@@ -4,6 +4,8 @@ import "./globals.css";
 
 import { ThemeProvider } from "./theme-provider"
 
+import { Analytics } from "@vercel/analytics/react"
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
