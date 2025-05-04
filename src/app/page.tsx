@@ -159,8 +159,16 @@ export default function EPUBConverter() {
       setProgress(95);
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Conversion failed');
+        let message: string;
+        // try JSON first
+        try {
+          const err = await response.json();
+          message = err.error || JSON.stringify(err);
+        } catch {
+          // fallback to plain text (HTML error page or whatever)
+          message = await response.text();
+        }
+        throw new Error(message || 'Conversion failed');
       }
 
       const blob = await response.blob();
