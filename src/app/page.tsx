@@ -156,21 +156,23 @@ export default function EPUBConverter() {
       });
 
       clearInterval(progressInterval);
-      setProgress(95);
 
       if (!response.ok) {
-        let message: string;
-        // try JSON first
+        // clone so we can try both JSON and text
+        const clone = response.clone();
+
+        let msg: string;
         try {
-          const err = await response.json();
-          message = err.error || JSON.stringify(err);
+          const err = await clone.json();
+          msg = err.error || JSON.stringify(err);
         } catch {
-          // fallback to plain text (HTML error page or whatever)
-          message = await response.text();
+          msg = await response.text();    // original or clone, doesn’t matter now
         }
-        throw new Error(message || 'Conversion failed');
+
+        throw new Error(msg || 'Conversion failed');
       }
 
+      // now that we’re sure it's the ZIP, read it once:
       const blob = await response.blob();
       const downloadUrl = URL.createObjectURL(blob);
 
