@@ -77,7 +77,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                 // Determine an output filename (append "-converted.epub" if needed).
                 const originalBaseName = uploadedFile.name.replace(/\.epub$/i, '');
                 const translatedBaseName = opencc.simplifiedToTaiwan(originalBaseName);
-                const outputFileName = `${translatedBaseName}-converted.epub`;
+                const outputFileName = `${translatedBaseName}.epub`;
                 // Add the converted EPUB to the outer zip.
                 outerZip.file(outputFileName, outputBuffer, { binary: true });
             })
