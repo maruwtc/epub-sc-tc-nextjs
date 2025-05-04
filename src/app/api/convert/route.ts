@@ -75,10 +75,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                     compression: 'DEFLATE',
                 });
                 // Determine an output filename (append "-converted.epub" if needed).
-                let outputFileName = uploadedFile.name;
-                if (!outputFileName.endsWith('-converted.epub')) {
-                    outputFileName = outputFileName.replace(/\.epub$/i, '') + '-converted.epub';
-                }
+                const originalBaseName = uploadedFile.name.replace(/\.epub$/i, '');
+                const translatedBaseName = opencc.simplifiedToTaiwan(originalBaseName);
+                const outputFileName = `${translatedBaseName}-converted.epub`;
                 // Add the converted EPUB to the outer zip.
                 outerZip.file(outputFileName, outputBuffer, { binary: true });
             })
