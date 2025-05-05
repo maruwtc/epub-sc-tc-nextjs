@@ -191,7 +191,11 @@ export default function EPUBConverter() {
       setTimeout(() => setProgress(0), 2000);
     } catch (err) {
       if (err instanceof Error) {
-        setError(err.message);
+        if (err.message.includes('Request Entity Too Large')) {
+          setError('Currently we only support files up to 4MB. Please try smaller or fewer files.');
+        } else {
+          setError(err.message);
+        }
       } else {
         setError('An error occurred during conversion');
       }
